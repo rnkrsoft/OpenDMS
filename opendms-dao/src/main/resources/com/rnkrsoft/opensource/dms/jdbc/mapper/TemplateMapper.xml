@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rnkrsoft.opensource.dms.jdbc.dao.TemplateDAO">
+    <resultMap id="selectTemplateResultMap" type="com.rnkrsoft.opensource.dms.jdbc.bo.QueryTemplateBO">
+        <!-- 编号 -->
+        <id column="TEMPLATE_ID" property="templateId" jdbcType="INTEGER" />
+        <result column="TEMPLATE_NAME" property="templateName" jdbcType="VARCHAR"/>
+        <result column="SQL_STATEMENT" property="sqlStatement" jdbcType="VARCHAR"/>
+        <result column="MAX_ROW_SIZE" property="maxRowSize" jdbcType="INTEGER"/>
+        <result column="DATA_SOURCE_ID" property="dataSourceId" jdbcType="INTEGER"/>
+        <result column="DATA_SOURCE_NAME" property="dataSourceName" jdbcType="VARCHAR"/>
+        <result column="DATA_SOURCE_TYPE" property="dataSourceType" jdbcType="INTEGER"/>
+        <result column="TEMPLATE_STATUS" property="templateStatus" jdbcType="INTEGER"/>
+        <!-- 添加时间 -->
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+        <!-- 修改时间 -->
+        <result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="selectTemplate" resultMap="selectTemplateResultMap">
+      SELECT
+        t1.TEMPLATE_ID as TEMPLATE_ID,
+        t1.TEMPLATE_NAME as TEMPLATE_NAME,
+        t1.SQL_STATEMENT as SQL_STATEMENT,
+        t1.MAX_ROW_SIZE as MAX_ROW_SIZE,
+        t1.DATA_SOURCE_ID as DATA_SOURCE_ID,
+        t2.DATA_SOURCE_NAME as DATA_SOURCE_NAME,
+        t2.DATA_SOURCE_TYPE as DATA_SOURCE_TYPE,
+        t1.TEMPLATE_STATUS as TEMPLATE_STATUS,
+        t1.CREATE_DATE as CREATE_DATE,
+        t1.LAST_UPDATE_DATE as LAST_UPDATE_DATE
+        FROM TB_TEMPLATE t1
+        INNER JOIN TB_DATA_SOURCE t2 on t1.DATA_SOURCE_ID = t2.DATA_SOURCE_ID
+        <where>
+            t1.TEMPLATE_STATUS = 1
+            <if test="params.templateName!=null and params.templateName.length() > 0">
+                AND t1.TEMPLATE_NAME like '%${params.templateName}%'
+            </if>
+            <if test="params.sqlStatement!=null and params.sqlStatement.length() > 0">
+                AND t1.SQL_STATEMENT like '%${params.sqlStatement}%'
+            </if>
+            <if test="params.dataSourceId!=null">
+                AND t1.DATA_SOURCE_ID = #{params.dataSourceId:INTEGER}
+            </if>
+            <if test="params.templateStatus!=null">
+                AND t1.TEMPLATE_STATUS = #{params.templateStatus:INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+disconf
+target
+.log
+*.iml
+.idea
+.settings
+.project
+.classpath
+.git
+~*.*
+.DS_Store
+.svn
+~

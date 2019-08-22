@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rnkrsoft.opensource.dms.jdbc.dao.DataSourceDAO" >
+    <resultMap id="selectDataSourceResultMap" type="com.rnkrsoft.opensource.dms.jdbc.entity.DataSourceEntity">
+        <!-- 编号 -->
+        <id column="DATA_SOURCE_ID" property="dataSourceId" jdbcType="INTEGER" />
+        <result column="DATA_SOURCE_NAME" property="dataSourceName" jdbcType="VARCHAR"/>
+        <result column="DATA_SOURCE_TYPE" property="dataSourceType" jdbcType="INTEGER"/>
+        <result column="HOST" property="host" jdbcType="VARCHAR"/>
+        <result column="PORT" property="port" jdbcType="INTEGER"/>
+        <result column="DRIVER_CLASS_NAME" property="driverClassName" jdbcType="VARCHAR"/>
+        <result column="SCHEMA_NAME" property="schemaName" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="username" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="DATA_SOURCE_STATUS" property="status" jdbcType="INTEGER"/>
+        <!-- 添加时间 -->
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+        <!-- 修改时间 -->
+        <result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_TYPE, HOST, PORT, DRIVER_CLASS_NAME, SCHEMA_NAME, USER_NAME,PASSWORD,REMARK,CREATE_DATE,LAST_UPDATE_DATE
+    </sql>
+
+    <select id="selectDataSource" resultMap="selectDataSourceResultMap">
+      SELECT  <include refid="Base_Column_List"/>
+      FROM    TB_DATA_SOURCE
+        <where>
+            DATA_SOURCE_STATUS = 1
+            <if test="params.dataSourceType!=null">
+                AND DATA_SOURCE_TYPE = #{params.dataSourceType:INTEGER}
+            </if>
+            <if test="params.host!=null">
+                AND HOST = #{params.host:VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

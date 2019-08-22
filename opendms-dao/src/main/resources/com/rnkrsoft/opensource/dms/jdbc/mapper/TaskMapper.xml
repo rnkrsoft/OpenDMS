@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rnkrsoft.opensource.dms.jdbc.dao.TaskDAO" >
+    <resultMap id="selectTaskResultMap" type="com.rnkrsoft.opensource.dms.jdbc.bo.QueryTaskBO">
+        <!-- 编号 -->
+        <id column="TASK_ID" property="taskId" jdbcType="INTEGER" />
+        <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR"/>
+        <result column="TEMPLATE_ID" property="templateId" jdbcType="INTEGER"/>
+        <result column="SQL_STATEMENT" property="sqlStatement" jdbcType="VARCHAR"/>
+        <result column="TASK_PROGRESS" property="taskProgress" jdbcType="INTEGER"/>
+        <result column="CREATE_USER_ID" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="CREATE_USER_NAME" property="createUserName" jdbcType="VARCHAR"/>
+        <result column="TASK_STATUS" property="taskStatus" jdbcType="INTEGER"/>
+        <result column="FAILURE_CAUSE" property="failureCause" jdbcType="VARCHAR"/>
+        <result column="FINISH_DATE" property="finishDate" jdbcType="VARCHAR"/>
+        <!-- 添加时间 -->
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+        <!-- 修改时间 -->
+        <result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        TASK_ID, TASK_NAME, TEMPLATE_ID, SQL_STATEMENT, TASK_PROGRESS, CREATE_USER_ID, CREATE_USER_NAME,TASK_STATUS, FAILURE_CAUSE, FINISH_DATE, CREATE_DATE,LAST_UPDATE_DATE
+    </sql>
+
+    <select id="selectTask" resultMap="selectTaskResultMap">
+        SELECT  <include refid="Base_Column_List"/>
+        FROM    TB_TASK
+        <where>
+            <if test="params.taskId!=null">
+                AND TASK_ID = #{params.taskId:INTEGER}
+            </if>
+            <if test="params.templateId!=null">
+                AND TEMPLATE_ID = #{params.templateId:INTEGER}
+            </if>
+            <if test="params.beginCreateDate!=null">
+                AND CREATE_DATE &gt;= #{params.beginCreateDate:TIMESTAMP}
+            </if>
+            <if test="params.endCreateDate!=null">
+                AND CREATE_DATE &lt; #{params.endCreateDate:TIMESTAMP}
+            </if>
+            <if test="params.finishDate!=null">
+                AND FINISH_DATE = #{params.finishDate}
+            </if>
+            <if test="params.taskStatus.size() > 0">
+                AND TASK_STATUS in
+                <foreach collection="params.taskStatus" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <update id="decreaseAllowDownloadCount">
+        UPDATE  TB_TASK
+        SET     ALLOW_DOWNLOAD_COUNT = ALLOW_DOWNLOAD_COUNT - 1
+        WHERE   TASK_ID = ${taskId}
+        AND     ALLOW_DOWNLOAD_COUNT > 0
+    </update>
+</mapper>

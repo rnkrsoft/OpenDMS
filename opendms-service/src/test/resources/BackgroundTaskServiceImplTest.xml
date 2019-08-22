@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="classpath*:testContext-dev.xml"/>
+    <import resource="classpath*:testContext-orm.xml"/>
+    <bean class="com.rnkrsoft.opensource.dms.services.DataSourceServiceImpl"/>
+    <bean class="com.rnkrsoft.opensource.dms.services.TemplateServiceImpl"/>
+    <bean class="com.rnkrsoft.opensource.dms.services.TaskServiceImpl"/>
+    <bean class="com.rnkrsoft.opensource.dms.services.BackgroundTaskServiceImpl"/>
+    <bean id="csv:GenerateFileService" class="com.rnkrsoft.opensource.dms.services.CsvGenerateFileService"/>
+</beans>
