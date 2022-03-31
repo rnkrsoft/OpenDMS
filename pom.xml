@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <skeleton4j.version>1.0.3-SNAPSHOT</skeleton4j.version>
-        <spring.version>4.3.20.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <druid.version>1.1.10</druid.version>
         <mysql-connector-java.version>5.1.39</mysql-connector-java.version>
         <aspectjweaver.version>1.8.10</aspectjweaver.version>
